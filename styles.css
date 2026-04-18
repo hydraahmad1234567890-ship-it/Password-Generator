@@ -1,0 +1,30 @@
+/* Custom styles for components and animations */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.dark .glass {
+    background: rgba(31, 41, 55, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.transition-all {
+    transition: all 0.3s ease;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #0ea5e9;
+    cursor: pointer;
+    border-radius: 50%;
+}
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #0ea5e9;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+}

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security & Cipher Toolkit</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 font-sans min-h-screen">
+    
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full glass shadow-sm px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="bg-primary-600 text-white p-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight">Security & Cipher Toolkit</h1>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:ring-2 hover:ring-primary-500 transition-all">
+            <span id="theme-icon-light" class="hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
+                </svg>
+            </span>
+            <span id="theme-icon-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </span>
+        </button>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 gap-8">
+        
+        <!-- Tool 1: Password Generator -->
+        <section class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                    </svg>
+                    <h2 class="text-lg font-semibold">Advanced Password Generator</h2>
+                </div>
+            </div>
+            <div class="p-6 space-y-6">
+                <!-- Result Area -->
+                <div class="relative">
+                    <input type="text" id="pw-output" readonly 
+                        class="w-full bg-gray-100 dark:bg-gray-900 text-xl font-mono px-4 py-4 rounded-xl border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        placeholder="Generated password...">
+                    <button id="copy-pw" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-primary-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-3 8v3m-3-3h6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Strength Indicator -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm font-medium">
+                        <span>Strength: <span id="pw-strength-text">Weak</span></span>
+                        <span id="pw-entropy">0 bits</span>
+                    </div>
+                    <div class="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div id="pw-strength-bar" class="h-full w-0 transition-all duration-500 bg-red-500"></div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium flex justify-between">
+                                Length: <span id="pw-length-val">16</span>
+                            </label>
+                            <input type="range" id="pw-length" min="6" max="64" value="16" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <input type="checkbox" id="pw-upper" checked class="w-4 h-4 text-primary-600 rounded">
+                            <span class="text-sm">Uppercase</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <input type="checkbox" id="pw-lower" checked class="w-4 h-4 text-primary-600 rounded">
+                            <span class="text-sm">Lowercase</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <input type="checkbox" id="pw-numbers" checked class="w-4 h-4 text-primary-600 rounded">
+                            <span class="text-sm">Numbers</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <input type="checkbox" id="pw-symbols" checked class="w-4 h-4 text-primary-600 rounded">
+                            <span class="text-sm">Symbols</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors col-span-2">
+                            <input type="checkbox" id="pw-exclude-similar" class="w-4 h-4 text-primary-600 rounded">
+                            <span class="text-sm">Exclude Similar (i, l, 1, L, o, 0, O)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button id="generate-pw-btn" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-primary-500/20 active:scale-[0.98]">
+                        Generate Password
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tool 2: Encryption/Decryption -->
+        <section class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <h2 class="text-lg font-semibold">AES-GCM Encryption / Decryption</h2>
+                </div>
+            </div>
+            <div class="p-6 space-y-6">
+                <!-- Warning for non-secure contexts -->
+                <div id="crypto-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex items-start gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p class="text-sm">Web Crypto API requires a secure context (HTTPS/Localhost). This tool may not function correctly in your current environment.</p>
+                </div>
+
+                <!-- Key Generator Section -->
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium">Encryption Key (256-bit Base64)</label>
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <input type="text" id="aes-key" class="w-full bg-gray-100 dark:bg-gray-900 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm font-mono" placeholder="Paste your key or generate one →">
+                            <button id="copy-aes-key" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-3 8v3m-3-3h6" />
+                                </svg>
+                            </button>
+                        </div>
+                        <button id="gen-aes-key-btn" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-4 rounded-xl transition-colors text-sm font-medium whitespace-nowrap">
+                            Generate Key
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Encryption side -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Plaintext</label>
+                        <textarea id="aes-plaintext" rows="4" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl p-4 focus:ring-2 focus:ring-primary-500 outline-none resize-none text-sm" placeholder="Text to encrypt..."></textarea>
+                        <button id="aes-encrypt-btn" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 rounded-xl transition-all shadow-md active:scale-95">Encrypt ↓</button>
+                    </div>
+                    <!-- Decryption side -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Ciphertext (Base64 Bundle)</label>
+                        <textarea id="aes-ciphertext" rows="4" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl p-4 focus:ring-2 focus:ring-primary-500 outline-none resize-none text-sm font-mono" placeholder="Base64 bundle to decrypt..."></textarea>
+                        <button id="aes-decrypt-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl transition-all shadow-md active:scale-95">Decrypt ↑</button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium">Decrypted / Result Output</label>
+                    <div class="relative">
+                        <textarea id="aes-output" readonly rows="3" class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl p-4 focus:outline-none text-sm" placeholder="Decryption result will appear here..."></textarea>
+                        <button id="copy-aes-output" class="absolute right-3 bottom-3 text-gray-400 hover:text-primary-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-3 8v3m-3-3h6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tool 3: Cipher Toolkit -->
+        <section class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    <h2 class="text-lg font-semibold">Classical & Grid Cipher Toolkit</h2>
+                </div>
+            </div>
+            <div class="p-6 space-y-6">
+                <!-- Selector and Options -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium">Select Cipher</label>
+                        <select id="cipher-type" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 outline-none text-sm">
+                            <option value="caesar">Caesar Cipher (Shift)</option>
+                            <option value="atbash">Atbash Cipher (Mirror)</option>
+                            <option value="vigenere">Vigenère Cipher (Keyed)</option>
+                            <option value="railfence">Rail Fence Cipher (Zigzag)</option>
+                            <option value="grid">Grid Cipher (Transposition)</option>
+                        </select>
+                        <p id="cipher-desc" class="text-xs text-gray-500 dark:text-gray-400 mt-2 px-1"></p>
+                    </div>
+
+                    <!-- Dynamic Parameters -->
+                    <div id="cipher-params" class="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 flex flex-col justify-center min-h-[100px]">
+                        <!-- Caesar Params -->
+                        <div id="params-caesar" class="space-y-2">
+                            <label class="block text-xs font-semibold uppercase text-gray-500">Shift Amount</label>
+                            <input type="number" id="caesar-shift" value="3" min="-25" max="25" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+                        </div>
+                        <!-- Atbash Params (None) -->
+                        <div id="params-atbash" class="hidden text-sm text-gray-500 italic">No parameters required for Atbash.</div>
+                        <!-- Vigenere Params -->
+                        <div id="params-vigenere" class="hidden space-y-2">
+                            <label class="block text-xs font-semibold uppercase text-gray-500">Keyword</label>
+                            <input type="text" id="vigenere-key" placeholder="SECRET" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+                        </div>
+                        <!-- Rail Fence Params -->
+                        <div id="params-railfence" class="hidden space-y-2">
+                            <label class="block text-xs font-semibold uppercase text-gray-500">Number of Rails (2-10)</label>
+                            <input type="number" id="rail-rails" value="3" min="2" max="10" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+                        </div>
+                        <!-- Grid Params -->
+                        <div id="params-grid" class="hidden space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase text-gray-500">Columns</label>
+                                    <input type="number" id="grid-cols" value="4" min="2" max="10" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase text-gray-500">Padding Char</label>
+                                    <input type="text" id="grid-padding" value="X" maxlength="1" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-center">
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="grid-reverse" class="w-4 h-4 text-primary-600 rounded">
+                                <label for="grid-reverse" class="text-xs text-gray-500">Read in reverse order</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input / Output Areas -->
+                <div class="space-y-4">
+                    <div class="relative">
+                        <textarea id="cipher-input" rows="4" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl p-4 focus:ring-2 focus:ring-primary-500 outline-none resize-none text-sm" placeholder="Type or paste to encode/decode..."></textarea>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <button id="cipher-encode-btn" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-[0.98]">Encode</button>
+                        <button id="cipher-decode-btn" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-[0.98]">Decode</button>
+                    </div>
+
+                    <div class="relative">
+                        <textarea id="cipher-output" readonly rows="4" class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl p-4 focus:outline-none text-sm" placeholder="Result will appear here..."></textarea>
+                        <div class="absolute right-3 bottom-3 flex gap-2">
+                            <button id="cipher-swap-btn" class="p-1 px-2 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 rounded-md transition-colors">Swap Input ↑</button>
+                            <button id="copy-cipher-output" class="p-1 px-2 text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 rounded-md transition-colors">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-4 py-12 text-center text-gray-500 dark:text-gray-400 text-sm">
+        <div class="flex flex-col items-center gap-4">
+            <p>© 2026 Security & Cipher Toolkit • Built with Client-Side Encryption</p>
+            <p class="opacity-70 text-xs">Developed for Ahmad Khan • Production Ready</p>
+        </div>
+    </footer>
+
+    <!-- Scripts - Loaded in order -->
+    <script src="js/utils.js"></script>
+    <script src="js/password.js"></script>
+    <script src="js/crypto.js"></script>
+    <script src="js/ciphers.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
